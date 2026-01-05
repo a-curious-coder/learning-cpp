@@ -3,7 +3,9 @@
 class CPU {
 
   std::string instruction_set[5] = {"LOAD", "ADD", "STORE", "SUBTRACT", "HALT"};
+  // Accumulator (sticky note - holds previous value)
   int AC = 0;
+  // Program Counter (increments to ensure free space of memory?)
   int PC = 0;
 
 public:
@@ -11,12 +13,15 @@ public:
 
   // Constructor
   CPU(int memory[64]) {
-    // While the cpu is running
+    // While cpu is running
     while (running) {
-      int choice = memory[PC];
-      //
+      int instruction = memory[PC];
+      std::string instruction_string = return_instruction_string(instruction);
+
+      int value = memory[PC + 1];
+      increment_program_counter();
       // Decode
-      switch (choice) {
+      switch (instruction) {
       case 0:
         std::cout << "LOAD" << std::endl;
         break;
@@ -33,12 +38,9 @@ public:
         func4();
         break;
       default:
-        std::cout << choice
-                  << " is not a valid choice; choose from: 1, 2, 3 or 4."
-                  << std::endl;
+        std::cout << "Yurt" << std::endl;
         break;
       }
-      increment_program_counter();
     }
     std::cout << "CPU is dead - bye bye" << std::endl;
   }
@@ -51,12 +53,16 @@ private:
     std::cout << "EXIT" << std::endl;
     running = false;
   }
+  std::string return_instruction_string(int instruction) {
+    return instruction_set[instruction];
+  }
   void increment_program_counter() { PC += 2; }
 };
 
 int main() {
-  // Initialised the cpu
-  int memory[64] = {1, 1, 4, 2, 3, 6, 4, 3};
+  enum opcode { load = 0, add = 1, store = 2, sub = 3, halt = 4 };
+
+  int memory[64] = {load, 1, sub, 2, store, 6, load, 3};
   CPU cpu(memory);
 
   return 0;
