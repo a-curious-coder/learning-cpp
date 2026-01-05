@@ -106,8 +106,16 @@ public:
   };
 };
 
+void func()
+{
+  IntArray a(10);
+}
+
 int main()
 {
+  // RAII: Resource Acquisition < basically a fucking nerd thought it was a good idea to make up some terms for shit; my bench is 130kg
+  // An example of RAII; the lifetime of a variable within a given scope
+  func();
   IntArray myArray(10);
   myArray.Set(0, 1);
   std::cout << myArray.Get(0) << "\n";
